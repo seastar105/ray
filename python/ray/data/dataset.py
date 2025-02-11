@@ -3579,7 +3579,7 @@ class Dataset:
         ray_remote_args: Dict[str, Any] = None,
         encoder: Optional[Union[bool, str, callable, list]] = True,
         concurrency: Optional[int] = None,
-        compress: bool = False
+        compress: bool = False,
         num_rows_per_file: Optional[int] = None,
     ) -> None:
         """Writes the dataset to `WebDataset <https://webdataset.github.io/webdataset/>`_ files.
