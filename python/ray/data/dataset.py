@@ -3579,6 +3579,7 @@ class Dataset:
         ray_remote_args: Dict[str, Any] = None,
         encoder: Optional[Union[bool, str, callable, list]] = True,
         concurrency: Optional[int] = None,
+        compress: bool = False
         num_rows_per_file: Optional[int] = None,
     ) -> None:
         """Writes the dataset to `WebDataset <https://webdataset.github.io/webdataset/>`_ files.
@@ -3635,6 +3636,7 @@ class Dataset:
                 to control number of tasks to run concurrently. This doesn't change the
                 total number of tasks run. By default, concurrency is dynamically
                 decided based on the available resources.
+            compress: save tar file with gz compression
             num_rows_per_file: [Deprecated] Use min_rows_per_file instead.
         """
         effective_min_rows = _validate_rows_per_file_args(
@@ -3650,6 +3652,7 @@ class Dataset:
             open_stream_args=arrow_open_stream_args,
             filename_provider=filename_provider,
             dataset_uuid=self._uuid,
+            compress=compress,
         )
         self.write_datasink(
             datasink,

@@ -20,6 +20,7 @@ class WebDatasetDatasink(BlockBasedFileDatasink):
         self,
         path: str,
         encoder: Optional[Union[bool, str, callable, list]] = True,
+        compress: bool = False,
         *,
         file_format: str = "tar",
         **file_datasink_kwargs,
@@ -27,9 +28,14 @@ class WebDatasetDatasink(BlockBasedFileDatasink):
         super().__init__(path, file_format="tar", **file_datasink_kwargs)
 
         self.encoder = encoder
+        self.compress = compress
 
     def write_block_to_file(self, block: BlockAccessor, file: "pyarrow.NativeFile"):
-        stream = tarfile.open(fileobj=file, mode="w|")
+        if self.compress:
+            mode = "w|gz"
+        else:
+            mode = "w|"
+        stream = tarfile.open(fileobj=file, mode=mode)
         samples = _make_iterable(block)
         for sample in samples:
             if not isinstance(sample, dict):
